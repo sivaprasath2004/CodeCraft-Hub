@@ -1,0 +1,74 @@
+[
+  {
+    "id": "html_001",
+    "topic": "Semantic HTML",
+    "level": "beginner",
+    "title": "Build a semantic webpage structure",
+    "description": "Create a semantic HTML5 page with header, nav, main, article, aside, and footer.",
+    "starterCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>My Page</title>\n</head>\n<body>\n  <!-- Add semantic elements -->\n</body>\n</html>",
+    "solution": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"description\" content=\"A semantic HTML5 example page\">\n  <title>Semantic HTML5 Page</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <ul>\n        <li><a href=\"#home\">Home</a></li>\n        <li><a href=\"#about\">About</a></li>\n        <li><a href=\"#contact\">Contact</a></li>\n      </ul>\n    </nav>\n  </header>\n\n  <main>\n    <article>\n      <header>\n        <h1>Article Title</h1>\n        <time datetime=\"2024-01-15\">January 15, 2024</time>\n      </header>\n      <p>Article content...</p>\n      <section>\n        <h2>Section Heading</h2>\n        <p>Section content...</p>\n      </section>\n      <footer><p>By: Author Name</p></footer>\n    </article>\n\n    <aside>\n      <h2>Related Links</h2>\n      <ul><li><a href=\"#\">Link 1</a></li></ul>\n    </aside>\n  </main>\n\n  <footer>\n    <p>&copy; 2024 My Site. <address><a href=\"mailto:info@example.com\">Contact</a></address></p>\n  </footer>\n</body>\n</html>",
+    "testCases": [],
+    "hints": ["Use article for self-contained content", "aside for sidebar content", "section for grouping related content"],
+    "explanation": "Semantic HTML elements convey meaning to browsers and screen readers. They improve SEO, accessibility, and code readability compared to generic divs."
+  },
+  {
+    "id": "html_002",
+    "topic": "CSS Flexbox",
+    "level": "beginner",
+    "title": "Create a responsive navigation bar",
+    "description": "Build a horizontal nav bar with logo on left and links on right using Flexbox.",
+    "starterCode": "<nav class=\"navbar\">\n  <div class=\"logo\">MyBrand</div>\n  <ul class=\"nav-links\">\n    <li><a href=\"#\">Home</a></li>\n    <li><a href=\"#\">About</a></li>\n    <li><a href=\"#\">Contact</a></li>\n  </ul>\n</nav>\n\n<style>\n  /* Add your styles */\n</style>",
+    "solution": "<nav class=\"navbar\">\n  <div class=\"logo\">MyBrand</div>\n  <ul class=\"nav-links\">\n    <li><a href=\"#\">Home</a></li>\n    <li><a href=\"#\">About</a></li>\n    <li><a href=\"#\">Contact</a></li>\n  </ul>\n</nav>\n\n<style>\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n\n  .navbar {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 1rem 2rem;\n    background: #1a1a2e;\n    color: white;\n  }\n\n  .logo {\n    font-size: 1.5rem;\n    font-weight: bold;\n    color: #e94560;\n  }\n\n  .nav-links {\n    display: flex;\n    list-style: none;\n    gap: 2rem;\n  }\n\n  .nav-links a {\n    color: white;\n    text-decoration: none;\n    transition: color 0.3s;\n  }\n\n  .nav-links a:hover { color: #e94560; }\n\n  /* Responsive */\n  @media (max-width: 768px) {\n    .navbar { flex-direction: column; gap: 1rem; }\n    .nav-links { gap: 1rem; }\n  }\n</style>",
+    "testCases": [],
+    "hints": ["justify-content: space-between pushes items apart", "align-items: center vertically centers"],
+    "explanation": "Flexbox is ideal for one-dimensional layouts. justify-content controls main axis (horizontal), align-items controls cross axis (vertical). gap replaces margins between flex items."
+  },
+  {
+    "id": "html_003",
+    "topic": "CSS Grid",
+    "level": "intermediate",
+    "title": "CSS Grid photo gallery",
+    "description": "Create a responsive photo gallery with CSS Grid where some images span multiple columns.",
+    "starterCode": "<div class=\"gallery\">\n  <div class=\"photo featured\">Featured</div>\n  <div class=\"photo\">2</div>\n  <div class=\"photo\">3</div>\n  <div class=\"photo wide\">Wide</div>\n  <div class=\"photo\">5</div>\n  <div class=\"photo\">6</div>\n</div>",
+    "solution": "<div class=\"gallery\">\n  <div class=\"photo featured\">Featured</div>\n  <div class=\"photo\">2</div>\n  <div class=\"photo\">3</div>\n  <div class=\"photo wide\">Wide</div>\n  <div class=\"photo\">5</div>\n  <div class=\"photo\">6</div>\n</div>\n\n<style>\n  .gallery {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    grid-auto-rows: 200px;\n    gap: 1rem;\n    padding: 1rem;\n  }\n\n  .photo {\n    background: #667eea;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: white;\n    font-size: 1.2rem;\n    border-radius: 8px;\n  }\n\n  .featured {\n    grid-column: span 2;\n    grid-row: span 2;\n    background: #764ba2;\n  }\n\n  .wide {\n    grid-column: span 2;\n    background: #f093fb;\n  }\n\n  @media (max-width: 600px) {\n    .gallery { grid-template-columns: 1fr; }\n    .featured, .wide { grid-column: span 1; grid-row: span 1; }\n  }\n</style>",
+    "testCases": [],
+    "hints": ["grid-template-columns defines column sizes", "span N to make element span multiple cells", "repeat(3, 1fr) = 3 equal columns"],
+    "explanation": "CSS Grid is for two-dimensional layouts. grid-column: span 2 makes an element occupy 2 columns. grid-auto-rows sets implicit row height. 1fr means one fraction of available space."
+  },
+  {
+    "id": "html_004",
+    "topic": "CSS Animations",
+    "level": "intermediate",
+    "title": "Create CSS keyframe animations",
+    "description": "Create a loading spinner and a pulsing button using CSS animations.",
+    "starterCode": "<div class=\"spinner\"></div>\n<button class=\"pulse-btn\">Click Me</button>\n\n<style>\n  /* Add animations */\n</style>",
+    "solution": "<div class=\"spinner\"></div>\n<button class=\"pulse-btn\">Click Me</button>\n\n<style>\n  /* Spinner */\n  .spinner {\n    width: 50px;\n    height: 50px;\n    border: 5px solid #f3f3f3;\n    border-top: 5px solid #3498db;\n    border-radius: 50%;\n    animation: spin 1s linear infinite;\n    margin: 20px;\n  }\n\n  @keyframes spin {\n    0%   { transform: rotate(0deg); }\n    100% { transform: rotate(360deg); }\n  }\n\n  /* Pulse Button */\n  .pulse-btn {\n    padding: 12px 24px;\n    background: #e74c3c;\n    color: white;\n    border: none;\n    border-radius: 25px;\n    cursor: pointer;\n    animation: pulse 2s ease-in-out infinite;\n    font-size: 1rem;\n  }\n\n  @keyframes pulse {\n    0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(231,76,60,0.7); }\n    50%  { transform: scale(1.05); }\n    70%  { box-shadow: 0 0 0 15px rgba(231,76,60,0); }\n    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231,76,60,0); }\n  }\n\n  /* Respect prefers-reduced-motion */\n  @media (prefers-reduced-motion: reduce) {\n    .spinner, .pulse-btn { animation: none; }\n  }\n</style>",
+    "testCases": [],
+    "hints": ["@keyframes defines animation steps", "animation shorthand: name duration timing-function iteration"],
+    "explanation": "CSS animations use @keyframes to define states. The animation property applies them. Always check prefers-reduced-motion for accessibility. CSS animations are GPU-accelerated when using transform and opacity."
+  },
+  {
+    "id": "html_005",
+    "topic": "CSS Variables",
+    "level": "intermediate",
+    "title": "Implement a dark/light theme with CSS Variables",
+    "description": "Create a theme system using CSS custom properties that can switch between light and dark mode.",
+    "starterCode": ":root {\n  /* Define your theme variables */\n}\n\n[data-theme=\"dark\"] {\n  /* Override for dark mode */\n}\n\n/* Use variables in your CSS */",
+    "solution": ":root {\n  --color-bg: #ffffff;\n  --color-surface: #f5f5f5;\n  --color-text: #1a1a1a;\n  --color-text-muted: #666666;\n  --color-primary: #4f46e5;\n  --color-primary-hover: #4338ca;\n  --color-border: #e2e8f0;\n  --shadow: 0 2px 8px rgba(0,0,0,0.1);\n  --transition: color 0.3s, background-color 0.3s;\n}\n\n[data-theme=\"dark\"] {\n  --color-bg: #0f172a;\n  --color-surface: #1e293b;\n  --color-text: #f1f5f9;\n  --color-text-muted: #94a3b8;\n  --color-primary: #6366f1;\n  --color-primary-hover: #818cf8;\n  --color-border: #334155;\n  --shadow: 0 2px 8px rgba(0,0,0,0.5);\n}\n\nbody {\n  background: var(--color-bg);\n  color: var(--color-text);\n  transition: var(--transition);\n  font-family: system-ui, sans-serif;\n}\n\n.card {\n  background: var(--color-surface);\n  border: 1px solid var(--color-border);\n  border-radius: 12px;\n  padding: 1.5rem;\n  box-shadow: var(--shadow);\n}\n\n.btn {\n  background: var(--color-primary);\n  color: white;\n  border: none;\n  padding: 0.5rem 1rem;\n  border-radius: 8px;\n  cursor: pointer;\n}\n\n.btn:hover { background: var(--color-primary-hover); }\n\n/* Toggle via JavaScript */\n// document.documentElement.setAttribute('data-theme', 'dark');",
+    "testCases": [],
+    "hints": ["--variable-name defines CSS custom property", "var(--variable-name) uses it", "Set on :root for global scope"],
+    "explanation": "CSS Custom Properties (variables) enable dynamic theming. Changing the root variables instantly updates all elements using them. JavaScript can toggle themes by updating data attributes."
+  },
+  {
+    "id": "html_006",
+    "topic": "Accessibility",
+    "level": "intermediate",
+    "title": "Make an accessible modal dialog",
+    "description": "Create an accessible modal with proper ARIA attributes, focus trapping, and keyboard navigation.",
+    "starterCode": "<!-- Create an accessible modal -->\n<button id=\"open-modal\">Open Dialog</button>\n\n<div id=\"modal\" role=\"dialog\">\n  <!-- modal content -->\n</div>",
+    "solution": "<button id=\"open-modal\" aria-haspopup=\"dialog\">Open Dialog</button>\n\n<div id=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modal-title\"\n     aria-describedby=\"modal-desc\" hidden>\n  <div class=\"modal-overlay\" id=\"modal-overlay\"></div>\n  <div class=\"modal-content\">\n    <h2 id=\"modal-title\">Dialog Title</h2>\n    <p id=\"modal-desc\">This dialog requires your attention.</p>\n    <button id=\"close-modal\" aria-label=\"Close dialog\">&times;</button>\n    <p>Modal body content here.</p>\n    <button>Confirm</button>\n    <button>Cancel</button>\n  </div>\n</div>\n\n<script>\nconst modal = document.getElementById('modal');\nconst openBtn = document.getElementById('open-modal');\nconst closeBtn = document.getElementById('close-modal');\nlet lastFocused;\n\nfunction openModal() {\n  lastFocused = document.activeElement;\n  modal.removeAttribute('hidden');\n  trapFocus(modal);\n  closeBtn.focus();\n}\n\nfunction closeModal() {\n  modal.setAttribute('hidden', '');\n  lastFocused?.focus(); // Restore focus\n}\n\nfunction trapFocus(element) {\n  const focusable = element.querySelectorAll(\n    'button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])'\n  );\n  const first = focusable[0];\n  const last = focusable[focusable.length - 1];\n\n  element.addEventListener('keydown', (e) => {\n    if (e.key !== 'Tab') return;\n    if (e.shiftKey && document.activeElement === first) {\n      e.preventDefault(); last.focus();\n    } else if (!e.shiftKey && document.activeElement === last) {\n      e.preventDefault(); first.focus();\n    }\n  });\n}\n\nopenBtn.addEventListener('click', openModal);\ncloseBtn.addEventListener('click', closeModal);\ndocument.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });\ndocument.getElementById('modal-overlay').addEventListener('click', closeModal);\n</script>",
+    "testCases": [],
+    "hints": ["role='dialog' identifies modal to screen readers", "aria-modal='true' for modal dialogs", "Trap focus inside modal when open"],
+    "explanation": "Accessible modals need: role='dialog', aria-modal='true', aria-labelledby/describedby, focus trapping, Escape key to close, and focus restoration. This ensures keyboard and screen reader users can use them."
+  }
+]

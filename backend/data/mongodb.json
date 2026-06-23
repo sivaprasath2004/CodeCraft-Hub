@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mongo_001",
+    "topic": "CRUD Operations",
+    "level": "beginner",
+    "title": "Insert and find documents",
+    "description": "Insert multiple user documents and query them with different filters.",
+    "starterCode": "// Connect and insert users\ndb.users.insertMany([\n  // your documents\n]);\n\n// Find all users\n// Find users older than 25\n// Find users with specific email domain",
+    "solution": "// Insert multiple documents\ndb.users.insertMany([\n  { name: 'Alice', age: 28, email: 'alice@gmail.com', role: 'admin' },\n  { name: 'Bob', age: 22, email: 'bob@yahoo.com', role: 'user' },\n  { name: 'Carol', age: 35, email: 'carol@gmail.com', role: 'user' }\n]);\n\n// Find all users\ndb.users.find({});\n\n// Find users older than 25\ndb.users.find({ age: { $gt: 25 } });\n\n// Find gmail users\ndb.users.find({ email: /gmail\\.com$/ });\n\n// Find with projection (only return name and email)\ndb.users.find({ role: 'user' }, { name: 1, email: 1, _id: 0 });\n\n// Sort by age descending\ndb.users.find({}).sort({ age: -1 });\n\n// Limit results\ndb.users.find({}).limit(2).skip(1);",
+    "testCases": [],
+    "hints": ["$gt, $lt, $gte, $lte for comparisons", "Projection: 1 to include, 0 to exclude"],
+    "explanation": "MongoDB CRUD: insertOne/insertMany, find/findOne, updateOne/updateMany, deleteOne/deleteMany. find() returns a cursor. Use projections to limit returned fields."
+  },
+  {
+    "id": "mongo_002",
+    "topic": "Aggregation Pipeline",
+    "level": "intermediate",
+    "title": "Group and aggregate sales data",
+    "description": "Use the aggregation pipeline to calculate total sales per category, find the top sellers.",
+    "starterCode": "// Sales collection:\n// { product, category, amount, date, seller }\n\n// Total sales per category\ndb.sales.aggregate([\n  // your pipeline\n]);",
+    "solution": "// Total sales amount per category\ndb.sales.aggregate([\n  { $group: {\n      _id: '$category',\n      totalSales: { $sum: '$amount' },\n      count: { $sum: 1 },\n      avgSale: { $avg: '$amount' }\n  }},\n  { $sort: { totalSales: -1 } },\n  { $limit: 5 }\n]);\n\n// Monthly sales trend\ndb.sales.aggregate([\n  { $match: { date: { $gte: new Date('2024-01-01') } } },\n  { $group: {\n      _id: {\n        year: { $year: '$date' },\n        month: { $month: '$date' }\n      },\n      total: { $sum: '$amount' }\n  }},\n  { $sort: { '_id.year': 1, '_id.month': 1 } }\n]);\n\n// Top sellers with their categories (join with sellers collection)\ndb.sales.aggregate([\n  { $lookup: {\n      from: 'sellers',\n      localField: 'seller',\n      foreignField: '_id',\n      as: 'sellerInfo'\n  }},\n  { $unwind: '$sellerInfo' },\n  { $group: {\n      _id: '$sellerInfo.name',\n      totalRevenue: { $sum: '$amount' }\n  }},\n  { $sort: { totalRevenue: -1 } },\n  { $limit: 10 }\n]);",
+    "testCases": [],
+    "hints": ["$match filters documents (like WHERE)", "$group aggregates (like GROUP BY)", "$lookup joins collections"],
+    "explanation": "The Aggregation Pipeline processes documents through stages. $match filters, $group aggregates, $sort orders, $lookup joins, $project reshapes. It's MongoDB's powerful analytics engine."
+  },
+  {
+    "id": "mongo_003",
+    "topic": "Indexes",
+    "level": "intermediate",
+    "title": "Create and analyze indexes",
+    "description": "Create appropriate indexes for common query patterns and analyze query performance.",
+    "starterCode": "// Create indexes for these common queries:\n// 1. Find users by email (unique)\n// 2. Find products by category and price range\n// 3. Full-text search on product descriptions",
+    "solution": "// 1. Unique index on email\ndb.users.createIndex({ email: 1 }, { unique: true });\n\n// 2. Compound index for category + price queries\ndb.products.createIndex({ category: 1, price: 1 });\n// This supports: { category: 'X' } and { category: 'X', price: {$lt: 100} }\n// But NOT: { price: {$lt: 100} } alone (left-most prefix rule)\n\n// 3. Text index for full-text search\ndb.products.createIndex({ name: 'text', description: 'text' });\ndb.products.find({ $text: { $search: 'wireless bluetooth' } }, { score: { $meta: 'textScore' } })\n  .sort({ score: { $meta: 'textScore' } });\n\n// 4. TTL index - auto-expire sessions after 24h\ndb.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 86400 });\n\n// Analyze query performance\ndb.users.find({ email: 'test@example.com' }).explain('executionStats');\n\n// List all indexes\ndb.users.getIndexes();\n\n// Index on nested field\ndb.orders.createIndex({ 'address.city': 1 });",
+    "testCases": [],
+    "hints": ["Indexes speed up reads but slow writes", "Explain() shows if index is being used", "Compound indexes follow left-most prefix rule"],
+    "explanation": "Indexes drastically improve query performance. Single field, compound, text, and TTL indexes serve different purposes. The ESR rule (Equality, Sort, Range) guides compound index field ordering."
+  },
+  {
+    "id": "mongo_004",
+    "topic": "Mongoose ODM",
+    "level": "intermediate",
+    "title": "Define Mongoose Schema with validation",
+    "description": "Create a User schema with Mongoose including validation, virtuals, and middleware.",
+    "starterCode": "const mongoose = require('mongoose');\n\nconst userSchema = new mongoose.Schema({\n  // Define fields with validation\n});\n\nconst User = mongoose.model('User', userSchema);",
+    "solution": "const mongoose = require('mongoose');\nconst bcrypt = require('bcrypt');\n\nconst userSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: [true, 'Name is required'],\n    trim: true,\n    minlength: [2, 'Name must be at least 2 characters']\n  },\n  email: {\n    type: String,\n    required: true,\n    unique: true,\n    lowercase: true,\n    match: [/^\\S+@\\S+\\.\\S+$/, 'Invalid email format']\n  },\n  password: {\n    type: String,\n    required: true,\n    minlength: 8,\n    select: false // Never returned in queries by default\n  },\n  role: {\n    type: String,\n    enum: ['user', 'admin', 'moderator'],\n    default: 'user'\n  },\n  age: { type: Number, min: 0, max: 120 },\n  createdAt: { type: Date, default: Date.now }\n}, {\n  timestamps: true // Adds createdAt and updatedAt automatically\n});\n\n// Virtual field - not stored in DB\nuserSchema.virtual('firstName').get(function() {\n  return this.name.split(' ')[0];\n});\n\n// Pre-save middleware - hash password\nuserSchema.pre('save', async function(next) {\n  if (!this.isModified('password')) return next();\n  this.password = await bcrypt.hash(this.password, 12);\n  next();\n});\n\n// Instance method\nuserSchema.methods.comparePassword = async function(candidatePassword) {\n  return bcrypt.compare(candidatePassword, this.password);\n};\n\n// Static method\nuserSchema.statics.findByEmail = function(email) {\n  return this.findOne({ email: email.toLowerCase() });\n};\n\n// Index\nuserSchema.index({ email: 1 });\nuserSchema.index({ createdAt: -1 });\n\nconst User = mongoose.model('User', userSchema);\nmodule.exports = User;",
+    "testCases": [],
+    "hints": ["required, min, max, enum are validators", "select: false hides field by default", "pre('save') runs before saving"],
+    "explanation": "Mongoose adds schema validation, middleware, virtuals, and methods on top of MongoDB driver. Pre/post hooks intercept operations. Instance methods on documents, static methods on the model."
+  },
+  {
+    "id": "mongo_005",
+    "topic": "Transactions",
+    "level": "advanced",
+    "title": "Multi-document ACID transactions",
+    "description": "Transfer money between accounts using a MongoDB transaction to ensure atomicity.",
+    "starterCode": "const mongoose = require('mongoose');\n\nasync function transferMoney(fromId, toId, amount) {\n  // Implement atomic transfer using session/transaction\n}",
+    "solution": "const mongoose = require('mongoose');\n\nasync function transferMoney(fromId, toId, amount) {\n  const session = await mongoose.startSession();\n\n  try {\n    session.startTransaction();\n\n    const fromAccount = await Account.findById(fromId).session(session);\n    const toAccount = await Account.findById(toId).session(session);\n\n    if (!fromAccount || !toAccount) {\n      throw new Error('Account not found');\n    }\n\n    if (fromAccount.balance < amount) {\n      throw new Error('Insufficient funds');\n    }\n\n    // Debit\n    await Account.findByIdAndUpdate(\n      fromId,\n      { $inc: { balance: -amount } },\n      { session, new: true }\n    );\n\n    // Credit\n    await Account.findByIdAndUpdate(\n      toId,\n      { $inc: { balance: amount } },\n      { session, new: true }\n    );\n\n    // Record transaction\n    await Transaction.create([{\n      from: fromId, to: toId, amount,\n      timestamp: new Date(), status: 'completed'\n    }], { session });\n\n    await session.commitTransaction();\n    console.log('Transfer successful!');\n  } catch (error) {\n    await session.abortTransaction();\n    console.error('Transfer failed, rolled back:', error.message);\n    throw error;\n  } finally {\n    session.endSession();\n  }\n}",
+    "testCases": [],
+    "hints": ["Start session with mongoose.startSession()", "Pass { session } to all operations", "commitTransaction or abortTransaction"],
+    "explanation": "MongoDB transactions (4.0+) ensure ACID properties across multiple documents/collections. Always pass the session to every operation. Use try/catch to abort on error and always end the session in finally."
+  },
+  {
+    "id": "mongo_006",
+    "topic": "Change Streams",
+    "level": "advanced",
+    "title": "Real-time updates with Change Streams",
+    "description": "Watch a collection for changes and react to insert, update, delete events in real-time.",
+    "starterCode": "const mongoose = require('mongoose');\n\nasync function watchOrders() {\n  // Watch for order changes\n}",
+    "solution": "const mongoose = require('mongoose');\n\nasync function watchOrders() {\n  const pipeline = [\n    { $match: {\n        $or: [\n          { operationType: 'insert' },\n          { operationType: 'update' },\n          { 'fullDocument.status': 'shipped' }\n        ]\n    }}\n  ];\n\n  const changeStream = Order.watch(pipeline, { fullDocument: 'updateLookup' });\n\n  changeStream.on('change', (change) => {\n    switch (change.operationType) {\n      case 'insert':\n        console.log('New order:', change.fullDocument);\n        notifyUser(change.fullDocument.userId, 'Order placed!');\n        break;\n      case 'update':\n        console.log('Order updated:', change.documentKey._id);\n        if (change.fullDocument?.status === 'shipped') {\n          sendShippingEmail(change.fullDocument);\n        }\n        break;\n      case 'delete':\n        console.log('Order deleted:', change.documentKey._id);\n        break;\n    }\n  });\n\n  changeStream.on('error', (error) => {\n    console.error('Change stream error:', error);\n    // Reconnect logic\n    setTimeout(watchOrders, 1000);\n  });\n\n  // Close stream gracefully\n  process.on('SIGTERM', () => changeStream.close());\n}\n\nwatchOrders();",
+    "testCases": [],
+    "hints": ["Change streams require replica set", "pipeline filters which changes to watch", "fullDocument: 'updateLookup' includes updated document"],
+    "explanation": "Change Streams watch MongoDB collections for real-time changes. They require a replica set and use the oplog. Use them to build real-time features, trigger notifications, or sync data."
+  }
+]

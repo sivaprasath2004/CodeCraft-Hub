@@ -1,0 +1,98 @@
+[
+  {
+    "id": "node_001",
+    "topic": "Core Modules",
+    "level": "beginner",
+    "title": "Read and write files with fs module",
+    "description": "Read a text file asynchronously, append some text, and write back to a new file.",
+    "starterCode": "const fs = require('fs');\nconst path = require('path');\n\n// Read file, append text, write to new file\nconst filePath = path.join(__dirname, 'input.txt');\n",
+    "solution": "const fs = require('fs');\nconst path = require('path');\n\n// Async with callbacks\nconst inputPath = path.join(__dirname, 'input.txt');\nconst outputPath = path.join(__dirname, 'output.txt');\n\nfs.readFile(inputPath, 'utf8', (err, data) => {\n  if (err) { console.error('Read error:', err); return; }\n  const modified = data + '\\nAppended line!';\n  fs.writeFile(outputPath, modified, 'utf8', (err) => {\n    if (err) console.error('Write error:', err);\n    else console.log('File written successfully!');\n  });\n});\n\n// Better: using fs.promises (async/await)\nasync function processFile() {\n  const data = await fs.promises.readFile(inputPath, 'utf8');\n  const modified = data + '\\nAppended line!';\n  await fs.promises.writeFile(outputPath, modified, 'utf8');\n  console.log('Done!');\n}\n\nprocessFile().catch(console.error);",
+    "testCases": [],
+    "hints": ["fs.readFile takes path, encoding, callback", "Use fs.promises for async/await style"],
+    "explanation": "The fs module provides file system operations. Prefer fs.promises for cleaner async/await code instead of callback-based APIs."
+  },
+  {
+    "id": "node_002",
+    "topic": "HTTP Server",
+    "level": "beginner",
+    "title": "Create a basic HTTP server",
+    "description": "Create an HTTP server that responds with 'Hello World' for GET / and JSON for GET /api/users.",
+    "starterCode": "const http = require('http');\n\nconst server = http.createServer((req, res) => {\n  // Handle routes\n});\n\nserver.listen(3000, () => console.log('Server running on port 3000'));",
+    "solution": "const http = require('http');\n\nconst users = [\n  { id: 1, name: 'Alice' },\n  { id: 2, name: 'Bob' }\n];\n\nconst server = http.createServer((req, res) => {\n  const { method, url } = req;\n\n  if (method === 'GET' && url === '/') {\n    res.writeHead(200, { 'Content-Type': 'text/plain' });\n    res.end('Hello World!');\n  } else if (method === 'GET' && url === '/api/users') {\n    res.writeHead(200, { 'Content-Type': 'application/json' });\n    res.end(JSON.stringify(users));\n  } else {\n    res.writeHead(404, { 'Content-Type': 'application/json' });\n    res.end(JSON.stringify({ error: 'Not Found' }));\n  }\n});\n\nserver.listen(3000, () => console.log('Server running on port 3000'));",
+    "testCases": [],
+    "hints": ["req.method and req.url identify the route", "res.writeHead sets status and headers"],
+    "explanation": "Node.js's built-in http module creates servers. In practice, use Express.js for routing. res.writeHead sets status codes and headers, res.end sends the response body."
+  },
+  {
+    "id": "node_003",
+    "topic": "Express.js",
+    "level": "beginner",
+    "title": "Build a REST API with Express",
+    "description": "Create a CRUD REST API for a todo list using Express with GET, POST, PUT, DELETE endpoints.",
+    "starterCode": "const express = require('express');\nconst app = express();\n\napp.use(express.json());\n\nlet todos = [];\nlet nextId = 1;\n\n// Implement CRUD routes",
+    "solution": "const express = require('express');\nconst app = express();\n\napp.use(express.json());\n\nlet todos = [];\nlet nextId = 1;\n\n// GET all todos\napp.get('/api/todos', (req, res) => {\n  res.json(todos);\n});\n\n// GET single todo\napp.get('/api/todos/:id', (req, res) => {\n  const todo = todos.find(t => t.id === parseInt(req.params.id));\n  if (!todo) return res.status(404).json({ error: 'Not found' });\n  res.json(todo);\n});\n\n// POST create todo\napp.post('/api/todos', (req, res) => {\n  const { title } = req.body;\n  if (!title) return res.status(400).json({ error: 'Title required' });\n  const todo = { id: nextId++, title, completed: false };\n  todos.push(todo);\n  res.status(201).json(todo);\n});\n\n// PUT update todo\napp.put('/api/todos/:id', (req, res) => {\n  const idx = todos.findIndex(t => t.id === parseInt(req.params.id));\n  if (idx === -1) return res.status(404).json({ error: 'Not found' });\n  todos[idx] = { ...todos[idx], ...req.body };\n  res.json(todos[idx]);\n});\n\n// DELETE todo\napp.delete('/api/todos/:id', (req, res) => {\n  const idx = todos.findIndex(t => t.id === parseInt(req.params.id));\n  if (idx === -1) return res.status(404).json({ error: 'Not found' });\n  todos.splice(idx, 1);\n  res.status(204).send();\n});\n\napp.listen(3000, () => console.log('API running on :3000'));",
+    "testCases": [],
+    "hints": ["app.use(express.json()) parses JSON bodies", ":id in routes = dynamic parameter", "req.params.id to access it"],
+    "explanation": "Express simplifies HTTP routing. Use express.json() middleware to parse request bodies. RESTful conventions: 201 for created, 204 for deleted, 404 for not found."
+  },
+  {
+    "id": "node_004",
+    "topic": "Middleware",
+    "level": "intermediate",
+    "title": "Create custom Express middleware",
+    "description": "Write a request logger middleware, authentication middleware, and error handling middleware.",
+    "starterCode": "const express = require('express');\nconst app = express();\n\n// Logger middleware\n\n// Auth middleware\n\n// Error handler middleware\n",
+    "solution": "const express = require('express');\nconst app = express();\n\napp.use(express.json());\n\n// 1. Logger Middleware\nfunction logger(req, res, next) {\n  const start = Date.now();\n  res.on('finish', () => {\n    const duration = Date.now() - start;\n    console.log(`${req.method} ${req.url} ${res.statusCode} - ${duration}ms`);\n  });\n  next();\n}\n\n// 2. Auth Middleware (JWT-like)\nfunction authenticate(req, res, next) {\n  const authHeader = req.headers.authorization;\n  if (!authHeader?.startsWith('Bearer ')) {\n    return res.status(401).json({ error: 'Unauthorized' });\n  }\n  const token = authHeader.split(' ')[1];\n  // In real app: verify JWT token\n  if (token !== 'valid-token') {\n    return res.status(403).json({ error: 'Invalid token' });\n  }\n  req.user = { id: 1, name: 'Alice' }; // attach user to request\n  next();\n}\n\n// 3. Error Handler Middleware (must have 4 params)\nfunction errorHandler(err, req, res, next) {\n  console.error(err.stack);\n  res.status(err.status || 500).json({\n    error: err.message || 'Internal Server Error'\n  });\n}\n\napp.use(logger);\n\napp.get('/public', (req, res) => res.json({ msg: 'Public route' }));\n\napp.get('/private', authenticate, (req, res) => {\n  res.json({ msg: `Hello ${req.user.name}` });\n});\n\napp.get('/error', (req, res, next) => {\n  next(new Error('Something broke!'));\n});\n\napp.use(errorHandler); // Must be last!\n\napp.listen(3000);",
+    "testCases": [],
+    "hints": ["Middleware calls next() to pass to next handler", "Error middleware has 4 parameters (err, req, res, next)", "Order matters — register error handler last"],
+    "explanation": "Express middleware are functions that process requests. They access req, res, and next. Call next() to continue, next(err) to pass to error handler. Register error middleware last with 4 params."
+  },
+  {
+    "id": "node_005",
+    "topic": "Streams",
+    "level": "advanced",
+    "title": "Process large files with streams",
+    "description": "Read a large CSV file using streams, process each line, and pipe to output without loading entire file in memory.",
+    "starterCode": "const fs = require('fs');\nconst readline = require('readline');\n\n// Process large file with streams\n",
+    "solution": "const fs = require('fs');\nconst readline = require('readline');\nconst path = require('path');\n\nasync function processLargeFile(inputPath, outputPath) {\n  const readStream = fs.createReadStream(inputPath, { encoding: 'utf8' });\n  const writeStream = fs.createWriteStream(outputPath);\n  const rl = readline.createInterface({ input: readStream });\n\n  let lineCount = 0;\n\n  for await (const line of rl) {\n    lineCount++;\n    // Process: transform CSV line (e.g., uppercase)\n    const processed = line.toUpperCase();\n    writeStream.write(processed + '\\n');\n  }\n\n  writeStream.end();\n  console.log(`Processed ${lineCount} lines`);\n}\n\n// Pipeline (cleaner with error handling)\nconst { pipeline } = require('stream/promises');\nconst { Transform } = require('stream');\n\nasync function pipelineExample(input, output) {\n  const upper = new Transform({\n    transform(chunk, encoding, callback) {\n      callback(null, chunk.toString().toUpperCase());\n    }\n  });\n\n  await pipeline(\n    fs.createReadStream(input),\n    upper,\n    fs.createWriteStream(output)\n  );\n  console.log('Pipeline done');\n}\n\nprocessLargeFile('input.csv', 'output.csv').catch(console.error);",
+    "testCases": [],
+    "hints": ["Streams process data chunk by chunk", "pipeline handles backpressure automatically", "for await...of works with async iterables"],
+    "explanation": "Streams handle large data without loading everything into memory. Readable streams emit data events, writable streams accept data. Use pipeline for safe stream composition with automatic error handling and cleanup."
+  },
+  {
+    "id": "node_006",
+    "topic": "Worker Threads",
+    "level": "advanced",
+    "title": "CPU-intensive task with Worker Threads",
+    "description": "Move CPU-intensive fibonacci calculation to a Worker Thread to avoid blocking the event loop.",
+    "starterCode": "const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');\n\nif (isMainThread) {\n  // Main thread: create worker\n} else {\n  // Worker thread: do the computation\n}",
+    "solution": "const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');\n\nfunction fib(n) {\n  if (n <= 1) return n;\n  return fib(n - 1) + fib(n - 2);\n}\n\nif (isMainThread) {\n  function runWorker(n) {\n    return new Promise((resolve, reject) => {\n      const worker = new Worker(__filename, { workerData: { n } });\n      worker.on('message', resolve);\n      worker.on('error', reject);\n      worker.on('exit', code => {\n        if (code !== 0) reject(new Error(`Worker exited with code ${code}`));\n      });\n    });\n  }\n\n  async function main() {\n    console.log('Starting workers...');\n    // Run multiple in parallel without blocking!\n    const [r1, r2] = await Promise.all([\n      runWorker(42),\n      runWorker(40)\n    ]);\n    console.log(`fib(42) = ${r1}, fib(40) = ${r2}`);\n  }\n\n  main();\n} else {\n  // Worker thread code\n  const result = fib(workerData.n);\n  parentPort.postMessage(result);\n}",
+    "testCases": [],
+    "hints": ["Worker threads share no memory by default", "isMainThread distinguishes main from worker", "parentPort.postMessage sends result back"],
+    "explanation": "Node.js is single-threaded, but Worker Threads allow true parallelism for CPU-intensive tasks. Unlike child_process, workers share memory via SharedArrayBuffer."
+  },
+  {
+    "id": "node_007",
+    "topic": "Event Emitter",
+    "level": "intermediate",
+    "title": "Build a custom EventEmitter",
+    "description": "Create a class extending EventEmitter to build an order processing system.",
+    "starterCode": "const EventEmitter = require('events');\n\nclass OrderProcessor extends EventEmitter {\n  // implement processOrder\n}\n\nconst processor = new OrderProcessor();\nprocessor.on('success', order => console.log('Order placed:', order));\nprocessor.on('error', err => console.error('Error:', err.message));",
+    "solution": "const EventEmitter = require('events');\n\nclass OrderProcessor extends EventEmitter {\n  constructor() {\n    super();\n    this.orders = [];\n  }\n\n  async processOrder(order) {\n    this.emit('processing', order);\n    try {\n      // Simulate async processing (DB save, payment, etc.)\n      await new Promise(resolve => setTimeout(resolve, 100));\n      if (!order.userId) throw new Error('User ID required');\n      if (order.amount <= 0) throw new Error('Amount must be positive');\n\n      order.id = Date.now();\n      order.status = 'confirmed';\n      this.orders.push(order);\n\n      this.emit('success', order);\n      return order;\n    } catch (err) {\n      this.emit('error', err);\n      throw err;\n    }\n  }\n\n  getOrders() { return this.orders; }\n}\n\nconst processor = new OrderProcessor();\nprocessor.on('processing', o => console.log('Processing:', o));\nprocessor.on('success', o => console.log('Order confirmed:', o.id));\nprocessor.on('error', e => console.error('Failed:', e.message));\n\nprocessor.processOrder({ userId: 1, amount: 99.99, item: 'Laptop' });\nprocessor.processOrder({ userId: null, amount: 50 }); // Will emit error",
+    "testCases": [],
+    "hints": ["Extend EventEmitter to inherit event methods", "this.emit() triggers event listeners", "Always handle 'error' events"],
+    "explanation": "Node.js EventEmitter is the foundation of its event-driven architecture. Extending it lets your classes emit and listen to custom events, enabling decoupled, reactive systems."
+  },
+  {
+    "id": "node_008",
+    "topic": "Clustering",
+    "level": "advanced",
+    "title": "Scale with Node.js Cluster",
+    "description": "Use the cluster module to take advantage of multiple CPU cores.",
+    "starterCode": "const cluster = require('cluster');\nconst http = require('http');\nconst os = require('os');\n\n// Fork workers for each CPU core",
+    "solution": "const cluster = require('cluster');\nconst http = require('http');\nconst os = require('os');\n\nconst numCPUs = os.cpus().length;\n\nif (cluster.isPrimary) {\n  console.log(`Primary ${process.pid} is running`);\n  console.log(`Forking ${numCPUs} workers...`);\n\n  for (let i = 0; i < numCPUs; i++) {\n    cluster.fork();\n  }\n\n  cluster.on('exit', (worker, code, signal) => {\n    console.log(`Worker ${worker.process.pid} died. Restarting...`);\n    cluster.fork(); // Auto-restart dead workers\n  });\n\n  cluster.on('online', (worker) => {\n    console.log(`Worker ${worker.process.pid} is online`);\n  });\n} else {\n  // Workers share the TCP connection\n  http.createServer((req, res) => {\n    res.writeHead(200);\n    res.end(`Handled by worker ${process.pid}\\n`);\n  }).listen(3000);\n\n  console.log(`Worker ${process.pid} started`);\n}",
+    "testCases": [],
+    "hints": ["cluster.isPrimary identifies the master process", "cluster.fork() creates worker processes", "Workers share the same port"],
+    "explanation": "Node.js Cluster forks worker processes, each running on a CPU core. They share the TCP connection, so incoming requests are load-balanced across workers. Dead workers are automatically restarted."
+  }
+]

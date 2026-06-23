@@ -1,0 +1,252 @@
+[
+  {
+    "id": "js_001",
+    "topic": "Variables & Data Types",
+    "level": "beginner",
+    "title": "Declare and initialize variables",
+    "description": "Declare a variable using let, one with const, and one with var. Assign different data types to each.",
+    "starterCode": "// Declare your variables here\n",
+    "solution": "let name = 'Alice';\nconst PI = 3.14;\nvar age = 25;\nconsole.log(typeof name);   // string\nconsole.log(typeof PI);     // number\nconsole.log(typeof age);    // number",
+    "testCases": [
+      { "input": "", "expected": "string", "description": "typeof string variable is 'string'" }
+    ],
+    "hints": ["Use let for mutable values", "const for constants", "var is function-scoped"],
+    "explanation": "JavaScript has three ways to declare variables. let and const are block-scoped (ES6+), while var is function-scoped. const cannot be reassigned after declaration."
+  },
+  {
+    "id": "js_002",
+    "topic": "Variables & Data Types",
+    "level": "beginner",
+    "title": "Check data types with typeof",
+    "description": "Write a function that takes any value and returns its type as a string.",
+    "starterCode": "function getType(value) {\n  // your code here\n}\n\nconsole.log(getType(42));\nconsole.log(getType('hello'));\nconsole.log(getType(true));\nconsole.log(getType(null));\nconsole.log(getType(undefined));",
+    "solution": "function getType(value) {\n  return typeof value;\n}\n\nconsole.log(getType(42));        // number\nconsole.log(getType('hello'));   // string\nconsole.log(getType(true));      // boolean\nconsole.log(getType(null));      // object (famous JS quirk!)\nconsole.log(getType(undefined)); // undefined",
+    "testCases": [
+      { "input": "42", "expected": "number" },
+      { "input": "'hello'", "expected": "string" },
+      { "input": "true", "expected": "boolean" }
+    ],
+    "hints": ["typeof returns a string", "null returns 'object' — a known JS quirk"],
+    "explanation": "typeof is an operator that returns the data type as a string. Note: typeof null === 'object' is a historical bug in JavaScript that was never fixed for backward compatibility."
+  },
+  {
+    "id": "js_003",
+    "topic": "Functions",
+    "level": "beginner",
+    "title": "Function Declaration vs Expression",
+    "description": "Write both a function declaration and a function expression that add two numbers.",
+    "starterCode": "// Function Declaration\n\n// Function Expression\n",
+    "solution": "// Function Declaration (hoisted)\nfunction addDeclaration(a, b) {\n  return a + b;\n}\n\n// Function Expression (not hoisted)\nconst addExpression = function(a, b) {\n  return a + b;\n};\n\nconsole.log(addDeclaration(3, 4)); // 7\nconsole.log(addExpression(3, 4));  // 7",
+    "testCases": [
+      { "input": "3, 4", "expected": "7" }
+    ],
+    "hints": ["Function declarations are hoisted", "Function expressions are NOT hoisted"],
+    "explanation": "Function declarations are hoisted to the top of their scope, meaning you can call them before they appear in code. Function expressions are not hoisted."
+  },
+  {
+    "id": "js_004",
+    "topic": "Arrow Functions",
+    "level": "beginner",
+    "title": "Convert regular function to arrow function",
+    "description": "Convert the given function to an arrow function.",
+    "starterCode": "// Regular function\nfunction multiply(a, b) {\n  return a * b;\n}\n\n// Convert to arrow function\nconst multiplyArrow = ",
+    "solution": "const multiplyArrow = (a, b) => a * b;\n\nconsole.log(multiplyArrow(3, 5)); // 15",
+    "testCases": [{ "input": "3, 5", "expected": "15" }],
+    "hints": ["Arrow functions use => syntax", "Single expressions can omit return and braces"],
+    "explanation": "Arrow functions provide a shorter syntax. If the function body is a single expression, you can omit the curly braces and the return keyword."
+  },
+  {
+    "id": "js_005",
+    "topic": "Arrays",
+    "level": "beginner",
+    "title": "Array methods: map, filter, reduce",
+    "description": "Given an array of numbers [1,2,3,4,5,6,7,8,9,10], use map to double values, filter to keep even numbers, and reduce to sum all.",
+    "starterCode": "const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\n// Double each number\nconst doubled = \n\n// Keep only even numbers\nconst evens = \n\n// Sum all numbers\nconst sum = \n\nconsole.log(doubled);\nconsole.log(evens);\nconsole.log(sum);",
+    "solution": "const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\nconst doubled = numbers.map(n => n * 2);\n// [2,4,6,8,10,12,14,16,18,20]\n\nconst evens = numbers.filter(n => n % 2 === 0);\n// [2,4,6,8,10]\n\nconst sum = numbers.reduce((acc, n) => acc + n, 0);\n// 55\n\nconsole.log(doubled);\nconsole.log(evens);\nconsole.log(sum);",
+    "testCases": [
+      { "input": "", "expected": "55", "description": "Sum of 1-10 is 55" }
+    ],
+    "hints": ["map transforms each element", "filter returns elements where callback is true", "reduce accumulates a single value"],
+    "explanation": "map(), filter(), and reduce() are the three fundamental array higher-order functions. They don't mutate the original array and can be chained."
+  },
+  {
+    "id": "js_006",
+    "topic": "Objects",
+    "level": "beginner",
+    "title": "Object destructuring",
+    "description": "Destructure the person object to extract name, age, and city.",
+    "starterCode": "const person = {\n  name: 'Alice',\n  age: 30,\n  address: {\n    city: 'New York',\n    zip: '10001'\n  }\n};\n\n// Destructure name, age, and city\n",
+    "solution": "const person = {\n  name: 'Alice',\n  age: 30,\n  address: { city: 'New York', zip: '10001' }\n};\n\nconst { name, age, address: { city } } = person;\n\nconsole.log(name); // Alice\nconsole.log(age);  // 30\nconsole.log(city); // New York",
+    "testCases": [{ "input": "", "expected": "Alice 30 New York" }],
+    "hints": ["Use {} to destructure objects", "Nested destructuring uses nested {}"],
+    "explanation": "Destructuring assignment lets you unpack values from objects into variables. You can also rename variables and set default values during destructuring."
+  },
+  {
+    "id": "js_007",
+    "topic": "Closures",
+    "level": "intermediate",
+    "title": "Create a counter using closures",
+    "description": "Create a makeCounter function that returns an object with increment, decrement, and getCount methods.",
+    "starterCode": "function makeCounter(initialValue = 0) {\n  // your code here\n}\n\nconst counter = makeCounter(10);\ncounter.increment();\ncounter.increment();\ncounter.decrement();\nconsole.log(counter.getCount()); // 11",
+    "solution": "function makeCounter(initialValue = 0) {\n  let count = initialValue;\n  \n  return {\n    increment() { count++; },\n    decrement() { count--; },\n    getCount() { return count; }\n  };\n}\n\nconst counter = makeCounter(10);\ncounter.increment();\ncounter.increment();\ncounter.decrement();\nconsole.log(counter.getCount()); // 11",
+    "testCases": [{ "input": "10", "expected": "11" }],
+    "hints": ["The inner function 'closes over' the count variable", "The count variable is private"],
+    "explanation": "A closure is a function that remembers the variables from its outer scope even after the outer function has returned. This enables data privacy and state persistence."
+  },
+  {
+    "id": "js_008",
+    "topic": "Promises",
+    "level": "intermediate",
+    "title": "Create and consume a Promise",
+    "description": "Create a function fetchUser that returns a Promise resolving with a user object after 1 second.",
+    "starterCode": "function fetchUser(id) {\n  // Return a Promise\n}\n\n// Consume the promise\nfetchUser(1)\n  .then(user => console.log(user))\n  .catch(err => console.error(err));",
+    "solution": "function fetchUser(id) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (id > 0) {\n        resolve({ id, name: 'Alice', email: 'alice@example.com' });\n      } else {\n        reject(new Error('Invalid user ID'));\n      }\n    }, 1000);\n  });\n}\n\nfetchUser(1)\n  .then(user => console.log(user))\n  .catch(err => console.error(err));",
+    "testCases": [{ "input": "1", "expected": "{ id: 1, name: 'Alice' ... }" }],
+    "hints": ["new Promise((resolve, reject) => {...})", "Use setTimeout to simulate async"],
+    "explanation": "Promises represent eventual completion of async operations. They can be in pending, fulfilled, or rejected state."
+  },
+  {
+    "id": "js_009",
+    "topic": "Async/Await",
+    "level": "intermediate",
+    "title": "Convert Promise chain to async/await",
+    "description": "Rewrite the Promise-based fetchData function using async/await syntax.",
+    "starterCode": "// Promise version\nfunction fetchDataPromise() {\n  return fetch('https://jsonplaceholder.typicode.com/todos/1')\n    .then(res => res.json())\n    .then(data => console.log(data))\n    .catch(err => console.error(err));\n}\n\n// Rewrite as async/await\nasync function fetchDataAsync() {\n  // your code here\n}",
+    "solution": "async function fetchDataAsync() {\n  try {\n    const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');\n    const data = await res.json();\n    console.log(data);\n    return data;\n  } catch (err) {\n    console.error(err);\n  }\n}",
+    "testCases": [],
+    "hints": ["async functions always return a Promise", "await pauses execution until Promise resolves", "Wrap in try/catch for error handling"],
+    "explanation": "async/await is syntactic sugar over Promises. It makes async code look synchronous and is easier to read and debug."
+  },
+  {
+    "id": "js_010",
+    "topic": "Prototypes & Classes",
+    "level": "intermediate",
+    "title": "Create a class with inheritance",
+    "description": "Create an Animal class with speak() method, then create a Dog class that extends Animal and overrides speak().",
+    "starterCode": "class Animal {\n  // your code\n}\n\nclass Dog extends Animal {\n  // your code\n}\n\nconst d = new Dog('Rex');\nd.speak(); // Rex barks.",
+    "solution": "class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    return `${this.name} makes a noise.`;\n  }\n}\n\nclass Dog extends Animal {\n  speak() {\n    return `${this.name} barks.`;\n  }\n}\n\nconst d = new Dog('Rex');\nconsole.log(d.speak()); // Rex barks.",
+    "testCases": [{ "input": "'Rex'", "expected": "Rex barks." }],
+    "hints": ["Use constructor() for initialization", "extends keyword for inheritance", "super() calls the parent constructor"],
+    "explanation": "ES6 classes are syntactic sugar over JavaScript's prototype-based inheritance. The extends keyword creates a subclass, and super() calls the parent class constructor."
+  },
+  {
+    "id": "js_011",
+    "topic": "Spread & Rest",
+    "level": "beginner",
+    "title": "Use spread and rest operators",
+    "description": "Write a function that accepts any number of arguments and returns their sum using rest operator. Then merge two arrays using spread.",
+    "starterCode": "// Rest operator - sum all arguments\nfunction sumAll(...args) {\n  // your code\n}\n\n// Spread operator - merge arrays\nconst arr1 = [1, 2, 3];\nconst arr2 = [4, 5, 6];\nconst merged = ",
+    "solution": "function sumAll(...args) {\n  return args.reduce((sum, n) => sum + n, 0);\n}\n\nconsole.log(sumAll(1, 2, 3, 4, 5)); // 15\n\nconst arr1 = [1, 2, 3];\nconst arr2 = [4, 5, 6];\nconst merged = [...arr1, ...arr2];\nconsole.log(merged); // [1, 2, 3, 4, 5, 6]",
+    "testCases": [{ "input": "1,2,3,4,5", "expected": "15" }],
+    "hints": ["...args collects all arguments into an array", "...arr spreads array elements"],
+    "explanation": "Rest (...args) collects multiple elements into an array. Spread (...arr) expands an array into individual elements."
+  },
+  {
+    "id": "js_012",
+    "topic": "Event Loop",
+    "level": "advanced",
+    "title": "Predict the output - Event Loop",
+    "description": "Predict the order of console.log output for this code.",
+    "starterCode": "console.log('1');\n\nsetTimeout(() => console.log('2'), 0);\n\nPromise.resolve().then(() => console.log('3'));\n\nconsole.log('4');\n\n// What is the output order?",
+    "solution": "// Output: 1, 4, 3, 2\n\nconsole.log('1'); // synchronous - runs immediately\nsetTimeout(() => console.log('2'), 0); // macrotask queue\nPromise.resolve().then(() => console.log('3')); // microtask queue\nconsole.log('4'); // synchronous - runs immediately\n\n// Explanation:\n// 1. Synchronous code runs first: '1', '4'\n// 2. Microtasks run before macrotasks: '3'\n// 3. Macrotasks run last: '2'",
+    "testCases": [{ "input": "", "expected": "1 4 3 2" }],
+    "hints": ["Synchronous > Microtasks (Promises) > Macrotasks (setTimeout)"],
+    "explanation": "The Event Loop processes: 1) Synchronous code, 2) Microtask queue (Promises, queueMicrotask), 3) Macrotask queue (setTimeout, setInterval, I/O)."
+  },
+  {
+    "id": "js_013",
+    "topic": "Scope & Hoisting",
+    "level": "intermediate",
+    "title": "Explain var hoisting",
+    "description": "What will this code output? Fix it using let.",
+    "starterCode": "// What does this output?\nconsole.log(x);\nvar x = 5;\nconsole.log(x);\n\n// Fix using let (will throw ReferenceError)\n// console.log(y);\n// let y = 5;",
+    "solution": "// With var:\nconsole.log(x); // undefined (hoisted but not initialized)\nvar x = 5;\nconsole.log(x); // 5\n\n// var is equivalent to:\n// var x; // hoisted to top\n// console.log(x); // undefined\n// x = 5;\n// console.log(x); // 5\n\n// With let - Temporal Dead Zone:\n// console.log(y); // ReferenceError: Cannot access 'y' before initialization\n// let y = 5;",
+    "testCases": [],
+    "hints": ["var declarations are hoisted", "let/const have Temporal Dead Zone"],
+    "explanation": "var declarations are hoisted to the top of their function scope and initialized as undefined. let and const are hoisted but not initialized — accessing them before declaration throws a ReferenceError (Temporal Dead Zone)."
+  },
+  {
+    "id": "js_014",
+    "topic": "this keyword",
+    "level": "intermediate",
+    "title": "Understand 'this' binding",
+    "description": "Fix the broken timer method so 'this' refers to the object correctly.",
+    "starterCode": "const timer = {\n  seconds: 0,\n  start() {\n    setInterval(function() {\n      this.seconds++; // 'this' is wrong here!\n      console.log(this.seconds);\n    }, 1000);\n  }\n};\n// Fix it using arrow function or .bind()",
+    "solution": "// Fix 1: Arrow function (inherits 'this' from outer scope)\nconst timer1 = {\n  seconds: 0,\n  start() {\n    setInterval(() => {\n      this.seconds++;\n      console.log(this.seconds);\n    }, 1000);\n  }\n};\n\n// Fix 2: .bind(this)\nconst timer2 = {\n  seconds: 0,\n  start() {\n    setInterval(function() {\n      this.seconds++;\n      console.log(this.seconds);\n    }.bind(this), 1000);\n  }\n};",
+    "testCases": [],
+    "hints": ["Arrow functions don't have their own 'this'", ".bind(this) binds the context"],
+    "explanation": "Regular functions have their own 'this' that depends on how they're called. Arrow functions inherit 'this' from the enclosing lexical scope, making them ideal for callbacks."
+  },
+  {
+    "id": "js_015",
+    "topic": "Error Handling",
+    "level": "intermediate",
+    "title": "Custom Error classes",
+    "description": "Create a custom ValidationError class that extends Error, with a field property.",
+    "starterCode": "class ValidationError extends Error {\n  // your code\n}\n\ntry {\n  throw new ValidationError('email', 'Invalid email format');\n} catch (e) {\n  console.log(e instanceof ValidationError); // true\n  console.log(e.field); // email\n  console.log(e.message); // Invalid email format\n}",
+    "solution": "class ValidationError extends Error {\n  constructor(field, message) {\n    super(message);\n    this.name = 'ValidationError';\n    this.field = field;\n  }\n}\n\ntry {\n  throw new ValidationError('email', 'Invalid email format');\n} catch (e) {\n  console.log(e instanceof ValidationError); // true\n  console.log(e.field);   // email\n  console.log(e.message); // Invalid email format\n  console.log(e.name);    // ValidationError\n}",
+    "testCases": [{ "input": "", "expected": "true email Invalid email format" }],
+    "hints": ["Call super(message) to set the message", "Set this.name for better stack traces"],
+    "explanation": "Custom error classes extend Error, providing specific error types. Call super(message) to properly initialize the Error, then add custom properties."
+  },
+  {
+    "id": "js_016",
+    "topic": "Generators",
+    "level": "advanced",
+    "title": "Create an infinite sequence generator",
+    "description": "Create a generator function that yields an infinite sequence of numbers starting from a given value.",
+    "starterCode": "function* infiniteSequence(start = 0) {\n  // your code\n}\n\nconst gen = infiniteSequence(5);\nconsole.log(gen.next().value); // 5\nconsole.log(gen.next().value); // 6\nconsole.log(gen.next().value); // 7",
+    "solution": "function* infiniteSequence(start = 0) {\n  let current = start;\n  while (true) {\n    yield current++;\n  }\n}\n\nconst gen = infiniteSequence(5);\nconsole.log(gen.next().value); // 5\nconsole.log(gen.next().value); // 6\nconsole.log(gen.next().value); // 7\n\n// Take first 5 values\nconst gen2 = infiniteSequence(1);\nconst first5 = Array.from({ length: 5 }, () => gen2.next().value);\nconsole.log(first5); // [1, 2, 3, 4, 5]",
+    "testCases": [{ "input": "5", "expected": "5 6 7" }],
+    "hints": ["function* defines a generator", "yield pauses execution and returns a value", "Generators are lazy — values computed on demand"],
+    "explanation": "Generators are functions that can pause (yield) and resume execution. They're memory-efficient for infinite sequences since values are computed on demand."
+  },
+  {
+    "id": "js_017",
+    "topic": "Symbol & WeakMap",
+    "level": "advanced",
+    "title": "Use Symbol for unique property keys",
+    "description": "Create a module that uses Symbol to create truly private-like properties on objects.",
+    "starterCode": "// Create unique symbols\nconst _name = Symbol('name');\nconst _age = Symbol('age');\n\n// Create a Person factory\nfunction createPerson(name, age) {\n  // use symbols as keys\n}\n",
+    "solution": "const _name = Symbol('name');\nconst _age = Symbol('age');\n\nfunction createPerson(name, age) {\n  const person = {\n    [_name]: name,\n    [_age]: age,\n    getName() { return this[_name]; },\n    getAge() { return this[_age]; }\n  };\n  return person;\n}\n\nconst p = createPerson('Alice', 30);\nconsole.log(p.getName()); // Alice\nconsole.log(p[_name]);    // Alice (accessible if you have the symbol)\nconsole.log(Object.keys(p)); // [] - symbols not in Object.keys!",
+    "testCases": [],
+    "hints": ["Symbols are unique and immutable", "Use [] to use symbol as object key", "Symbols don't appear in Object.keys()"],
+    "explanation": "Symbols are unique primitive values often used as object property keys to avoid naming collisions. Symbol-keyed properties are invisible to for...in loops and Object.keys()."
+  },
+  {
+    "id": "js_018",
+    "topic": "Proxy & Reflect",
+    "level": "advanced",
+    "title": "Create a validation proxy",
+    "description": "Create a Proxy for a user object that validates types before setting values.",
+    "starterCode": "const user = {};\n\nconst validatedUser = new Proxy(user, {\n  set(target, prop, value) {\n    // Validate that 'age' is a number and 'name' is a string\n  }\n});\n\nvalidatedUser.name = 'Alice'; // OK\nvalidatedUser.age = 25;      // OK\nvalidatedUser.age = 'old';   // Should throw TypeError",
+    "solution": "const user = {};\n\nconst validatedUser = new Proxy(user, {\n  set(target, prop, value) {\n    if (prop === 'age' && typeof value !== 'number') {\n      throw new TypeError('age must be a number');\n    }\n    if (prop === 'name' && typeof value !== 'string') {\n      throw new TypeError('name must be a string');\n    }\n    target[prop] = value;\n    return true;\n  },\n  get(target, prop) {\n    return prop in target ? target[prop] : `Property ${prop} not found`;\n  }\n});\n\nvalidatedUser.name = 'Alice';\nvalidatedUser.age = 25;\nconsole.log(validatedUser.name); // Alice\nconsole.log(validatedUser.age);  // 25",
+    "testCases": [],
+    "hints": ["Proxy intercepts operations on objects", "set trap must return true on success"],
+    "explanation": "Proxy objects intercept and customize fundamental operations (property lookup, assignment, enumeration). They're useful for validation, logging, and reactive programming."
+  },
+  {
+    "id": "js_019",
+    "topic": "Design Patterns",
+    "level": "advanced",
+    "title": "Implement the Observer Pattern",
+    "description": "Implement an EventEmitter class with on, off, and emit methods.",
+    "starterCode": "class EventEmitter {\n  // your code\n}\n\nconst emitter = new EventEmitter();\nemitter.on('data', (payload) => console.log('Received:', payload));\nemitter.emit('data', { msg: 'hello' }); // Received: { msg: 'hello' }",
+    "solution": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n\n  on(event, listener) {\n    if (!this.events[event]) this.events[event] = [];\n    this.events[event].push(listener);\n    return this;\n  }\n\n  off(event, listener) {\n    if (!this.events[event]) return this;\n    this.events[event] = this.events[event].filter(l => l !== listener);\n    return this;\n  }\n\n  emit(event, ...args) {\n    if (!this.events[event]) return;\n    this.events[event].forEach(listener => listener(...args));\n  }\n\n  once(event, listener) {\n    const wrapper = (...args) => {\n      listener(...args);\n      this.off(event, wrapper);\n    };\n    this.on(event, wrapper);\n  }\n}\n\nconst emitter = new EventEmitter();\nemitter.on('data', (payload) => console.log('Received:', payload));\nemitter.emit('data', { msg: 'hello' });",
+    "testCases": [],
+    "hints": ["Store listeners in an object keyed by event name", "emit calls all listeners for that event"],
+    "explanation": "The Observer pattern (pub/sub) allows objects to subscribe to events and be notified when they occur. It's the foundation of Node.js's EventEmitter and browser DOM events."
+  },
+  {
+    "id": "js_020",
+    "topic": "Memoization",
+    "level": "advanced",
+    "title": "Implement a memoize function",
+    "description": "Implement a memoize higher-order function that caches results of expensive function calls.",
+    "starterCode": "function memoize(fn) {\n  // your code\n}\n\nconst expensiveSquare = memoize((n) => {\n  console.log('Computing...');\n  return n * n;\n});\n\nconsole.log(expensiveSquare(5)); // Computing... 25\nconsole.log(expensiveSquare(5)); // 25 (from cache)\nconsole.log(expensiveSquare(6)); // Computing... 36",
+    "solution": "function memoize(fn) {\n  const cache = new Map();\n  \n  return function(...args) {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) {\n      return cache.get(key);\n    }\n    const result = fn.apply(this, args);\n    cache.set(key, result);\n    return result;\n  };\n}\n\nconst expensiveSquare = memoize((n) => {\n  console.log('Computing...');\n  return n * n;\n});\n\nconsole.log(expensiveSquare(5)); // Computing... 25\nconsole.log(expensiveSquare(5)); // 25 (cached!)\nconsole.log(expensiveSquare(6)); // Computing... 36",
+    "testCases": [],
+    "hints": ["Use a Map to store cache", "JSON.stringify args as cache key", "Return cached result if exists"],
+    "explanation": "Memoization caches the results of expensive function calls and returns cached result when the same inputs occur again. It's a form of optimization trading memory for speed."
+  }
+]
